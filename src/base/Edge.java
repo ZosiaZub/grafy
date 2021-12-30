@@ -96,7 +96,7 @@ public class Edge {
 
     public boolean isCursorOverEdge(int x_pointer, int y_pointer){
         boolean answer = false;
-        if (minXY(x1, x2) < x_pointer && x_pointer< maxXY(x1, x2) && minXY(y1, y2) < y_pointer && y_pointer< maxXY(y1, y2)) {
+        if (minXY(x1, x2) < x_pointer && x_pointer < maxXY(x1, x2) && minXY(y1, y2) < y_pointer && y_pointer< maxXY(y1, y2)) {
             if (y_pointer == aRownanieProstej(x1, y1, x2, y2) * x_pointer + bRownanieProstej(x1, y1, x2, y2)) {
                 answer = true;
             } else answer = false;
@@ -104,4 +104,3 @@ public class Edge {
         return answer;
     }
 }
-

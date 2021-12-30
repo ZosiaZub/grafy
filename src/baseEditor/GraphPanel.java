@@ -50,6 +50,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         this.graph = graph;
     }
 
+
     private Node isItNode (int x_cursor, int y_cursor){
         for(Node node : graph.getNodesList()){
             if(node.isCursorOverNode(x_cursor,y_cursor))
@@ -57,10 +58,10 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         }
         return null;
     }
-
     private Node isItNodeEvent (java.awt.event.MouseEvent event){
         return isItNode(event.getX(), event.getY());
     }
+
 
     private Edge isItEdge (int x_cursor, int y_cursor){
         if (edgeUnderCursor.isCursorOverEdge(x_cursor,y_cursor)==true){
@@ -68,31 +69,66 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         }
         return null;
     }
+    private Edge isItEdgeEvent (java.awt.event.MouseEvent event){
+        return isItEdge(event.getX(), event.getY());
+    }
+
 
     private void setCursorEvent(java.awt.event.MouseEvent event){
-        nodeUnderCursor = isItNodeEvent(event);
-        if (nodeUnderCursor != null) {
-            mouseCursor = Cursor.HAND_CURSOR;
-        } else if (leftMouseButton) {
-            mouseCursor = Cursor.MOVE_CURSOR;
-        } else {
-            mouseCursor = Cursor.DEFAULT_CURSOR;
+
+        if( isItNode(event.getX(), event.getY()) != null) {
+            nodeUnderCursor = isItNodeEvent(event);
+
+            if (nodeUnderCursor != null) {
+                mouseCursor = Cursor.HAND_CURSOR;
+            } else if (leftMouseButton) {
+                mouseCursor = Cursor.MOVE_CURSOR;
+            } else {
+                mouseCursor = Cursor.DEFAULT_CURSOR;
+            }
+
+        } else if (isItEdge(event.getX(), event.getY()) != null) {
+            edgeUnderCursor = isItEdgeEvent(event);
+
+            if (edgeUnderCursor != null) {
+                mouseCursor = Cursor.HAND_CURSOR;
+            } else if (leftMouseButton) {
+                mouseCursor = Cursor.MOVE_CURSOR;
+            } else {
+                mouseCursor = Cursor.DEFAULT_CURSOR;
+            }
+
         }
+
         setCursor(Cursor.getPredefinedCursor(mouseCursor));
         mouseX = event.getX();
         mouseY = event.getY();
     }
 
     private void setCursorObject(){
-        nodeUnderCursor = isItNode(mouseX, mouseY);
-        if (nodeUnderCursor != null) {
-            mouseCursor = Cursor.HAND_CURSOR;
-        } else if (leftMouseButton) {
-            mouseCursor = Cursor.MOVE_CURSOR;
-        } else {
-            mouseCursor = Cursor.DEFAULT_CURSOR;
+        if(isItNode(mouseX, mouseY) != null) {
+            nodeUnderCursor = isItNode(mouseX, mouseY);
+
+            if (nodeUnderCursor != null) {
+                mouseCursor = Cursor.HAND_CURSOR;
+            } else if (leftMouseButton) {
+                mouseCursor = Cursor.MOVE_CURSOR;
+            } else {
+                mouseCursor = Cursor.DEFAULT_CURSOR;
+            }
+            setCursor(Cursor.getPredefinedCursor(mouseCursor));
+
+        } else if (isItEdge(mouseX, mouseY) != null){
+            edgeUnderCursor = isItEdge(mouseX, mouseY);
+
+            if (nodeUnderCursor != null) {
+                mouseCursor = Cursor.HAND_CURSOR;
+            } else if (leftMouseButton) {
+                mouseCursor = Cursor.MOVE_CURSOR;
+            } else {
+                mouseCursor = Cursor.DEFAULT_CURSOR;
+            }
         }
-        setCursor(Cursor.getPredefinedCursor(mouseCursor));
     }
 
     @Override
@@ -261,7 +297,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
             repaint();
         });
 
-
         popup.add(menuItem);
         menuItem = new JMenuItem("Remove this node");
 
@@ -275,6 +310,10 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         popup.show(event.getComponent(), event.getX(), event.getY());
     }
 
+
+    /*
+    TODO
+     */
     private void showPopUpMenuEdge(java.awt.event.MouseEvent event){
         JMenuItem menuItem;
 
@@ -282,7 +321,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         menuItem = new JMenuItem("New edge");
 
         menuItem.addActionListener((action) -> {
-            graph.addEdge(new Edge(event.getX(), event.getY(),  ));
+   //         graph.addEdge(new Edge(event.getX(), event.getY(),  )); ------??
             repaint();
         });
 
@@ -300,7 +339,6 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
             graph.removeEdge(edge);
             repaint();
         });
-
 
         popup.add(menuItem);
         popup.show(event.getComponent(), event.getX(), event.getY());

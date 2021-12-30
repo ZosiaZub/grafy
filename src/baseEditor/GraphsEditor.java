@@ -23,25 +23,25 @@ public class GraphsEditor extends JFrame implements ActionListener {
 
     private static final String INTRODUCING =
             "Autor:     Zofia Zub\n"+
-                    "Indeks:    259114\n"+
-                    "Data:      15.12.2021r.\n" +
-                    "Tytul:     Program do edytowania grafow";
+            "Indeks:    259114\n"+
+            "Data:      15.12.2021r.\n" +
+            "Tytul:     Program do edytowania grafow";
 
     private static final String INSTRUCTION =
             "PROGRAM INSTRUCTION:\n"+
-                    "RMB -> right mouse button\n"+
-                    "LMB -> left mouse button\n"+
-                    "- drag to move all nodes\n"+
-                    "- use arrow keys to move your graph\n"+
-                    "- when the mouse cursor is on the node:\n"+
-                    "   --> press + or - to increase or decrease the size of the node\n"+
-                    "   --> press RMB to change the node's color or to remove the node\n"+
-                    "   --> press Y/ G/ R/ W to change the color (yellow, green, red, white) of the node \n"+
-                    "   --> press Delate to remove the node\n"+
-                    "   --> drag to move the node\n"+
-                    "- drag to move all nodes\n"+
-                    "- press the RMB to add a new node, where the mouse cursor is \n"+
-                    "";
+            "RMB -> right mouse button\n"+
+            "LMB -> left mouse button\n"+
+            "- drag to move all nodes\n"+
+            "- use arrow keys to move your graph\n"+
+            "- when the mouse cursor is on the node:\n"+
+            "   --> press + or - to increase or decrease the size of the node\n"+
+            "   --> press RMB to change the node's color or to remove the node\n"+
+            "   --> press Y/ G/ R/ W to change the color (yellow, green, red, white) of the node \n"+
+            "   --> press Delate to remove the node\n"+
+            "   --> drag to move the node\n"+
+            "- drag to move all nodes\n"+
+            "- press the RMB to add a new node, where the mouse cursor is \n"+
+            "";
 
 
     public static void main(String[] args) {

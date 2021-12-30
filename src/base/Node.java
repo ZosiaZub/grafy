@@ -1,12 +1,12 @@
 package base;
 
 /*
- *   Klasa Node tworzy na plaszcyznie obiety Node (wezly).
- *
- *   autor:  Zofia Zub
- *   indeks: 259114
- *   data:   15.12.2021r.
- */
+*   Klasa Node tworzy na plaszcyznie obiety Node (wezly).
+*
+*   autor:  Zofia Zub
+*   indeks: 259114
+*   data:   15.12.2021r.
+*/
 
 import java.awt.*;
 import static java.lang.Math.pow;
@@ -80,4 +80,3 @@ public class Node {
         return "(" + x + ";" + y + ";" + r + ")";
     }
 }
-
