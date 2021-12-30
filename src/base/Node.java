@@ -9,10 +9,13 @@ package base;
 */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import static java.lang.Math.pow;
 
 
-public class Node {
+public class Node implements ActionListener {
 
     private int x;
     private int y;
@@ -40,14 +43,6 @@ public class Node {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public int getR() {
-        return r;
-    }
-
-    public void setR(int r) {
-        this.r = r;
     }
 
     public Color getColor() {
@@ -78,5 +73,10 @@ public class Node {
     @Override
     public String toString(){
         return "(" + x + ";" + y + ";" + r + ")";
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }

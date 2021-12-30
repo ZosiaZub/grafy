@@ -14,34 +14,35 @@ import base.Graph;
 import base.Node;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class GraphsEditor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     private static final String INTRODUCING =
-            "Autor:     Zofia Zub\n"+
-            "Indeks:    259114\n"+
-            "Data:      15.12.2021r.\n" +
-            "Tytul:     Program do edytowania grafow";
+            "Author:     Zofia Zub\n" +
+                    "Indeks:    259114\n" +
+                    "Data:      15.12.2021r.\n" +
+                    "Title:     Program do edytowania grafow";
 
     private static final String INSTRUCTION =
-            "PROGRAM INSTRUCTION:\n"+
-            "RMB -> right mouse button\n"+
-            "LMB -> left mouse button\n"+
-            "- drag to move all nodes\n"+
-            "- use arrow keys to move your graph\n"+
-            "- when the mouse cursor is on the node:\n"+
-            "   --> press + or - to increase or decrease the size of the node\n"+
-            "   --> press RMB to change the node's color or to remove the node\n"+
-            "   --> press Y/ G/ R/ W to change the color (yellow, green, red, white) of the node \n"+
-            "   --> press Delate to remove the node\n"+
-            "   --> drag to move the node\n"+
-            "- drag to move all nodes\n"+
-            "- press the RMB to add a new node, where the mouse cursor is \n"+
-            "";
+            "PROGRAM INSTRUCTION:\n" +
+                    "- RMB --> right mouse button\n" +
+                    "- LMB --> left mouse button\n" +
+                    "\n" +
+                    "- if you want to add a new node follow those steps:\n" +
+                    "   > click RMB in the place, where you want to create a new node\n" +
+                    "   > click the 'New node' button\n" +
+                    "   > click the 'Remove node' button, if you want to remove the new node\n" +
+                    "   > in order to change the color, click the 'Change the color' button and choose whatever color you like\n" +
+                    "   > drag the node with the LMB to move it\n" +
+                    "\n" +
+                    "- if you want to add a new edge follow those steps:\n" +
+                    "   > click LMB in the place, where you want the edge to start\n" +
+                    "   > click the 'New edge' button\n" +
+                    "   > click in the place, where you want the edge to end\n" +
+                    "   > click the 'Remove edge' button, if you want to remove the new edge\n" +
+                    "\n";
 
 
     public static void main(String[] args) {
@@ -53,7 +54,6 @@ public class GraphsEditor extends JFrame implements ActionListener {
     private JMenu menuHelp = new JMenu("Help");
     private JMenu menuListOf = new JMenu("List of ...");
     private JMenuItem newItem = new JMenuItem("New");
-    private JMenuItem removeItem = new JMenuItem("Remove");
     private JMenuItem exitItem = new JMenuItem("EXIT");
     private JMenuItem nodesListItem = new JMenuItem("List of nodes");
     private JMenuItem instructionItem = new JMenuItem("Instruction");
@@ -64,7 +64,7 @@ public class GraphsEditor extends JFrame implements ActionListener {
     public GraphsEditor() {
         super(INTRODUCING);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400,400);
+        setSize(400, 400);
         setLocationRelativeTo(null);
         setContentPane(panel);
         createMenu();
@@ -72,18 +72,17 @@ public class GraphsEditor extends JFrame implements ActionListener {
     }
 
 
-    private void showListOfNodes(Graph graph){
+    private void showListOfNodes(Graph graph) {
         Node array[] = graph.getNodesList().toArray(new Node[0]);
         StringBuilder amountOfNodes = new StringBuilder("Ilosc wezlow: " + array.length + "\n");
-        for (Node node : array){
+        for (Node node : array) {
             amountOfNodes.append(node + " ");
         }
         JOptionPane.showMessageDialog(this, amountOfNodes);
     }
 
-    private void createMenu(){
+    private void createMenu() {
         newItem.addActionListener(this);
-        removeItem.addActionListener(this);
         exitItem.addActionListener(this);
         nodesListItem.addActionListener(this);
         instructionItem.addActionListener(this);
@@ -96,7 +95,6 @@ public class GraphsEditor extends JFrame implements ActionListener {
 
         menuGraph.setMnemonic(KeyEvent.VK_G);
         menuGraph.add(newItem);
-        menuGraph.add(removeItem);
         menuGraph.add(exitItem);
 
         menuListOf.setMnemonic(KeyEvent.VK_G);
@@ -111,9 +109,6 @@ public class GraphsEditor extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (newItem.equals(source)) {
-            panel.setGraph(new Graph());
-
-        }else if (removeItem.equals(source)){
             panel.setGraph(new Graph());
 
         } else if (nodesListItem.equals(source)) {

@@ -15,15 +15,13 @@ import base.Node;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 public class GraphPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
     private static final long serialVersionUID = 1L;
 
-    private Graph graph;
+    private Graph graph = new Graph();
 
     private int mouseX = 0;
     private int mouseY = 0;
@@ -34,12 +32,35 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     private Node nodeUnderCursor = null;
     private Edge edgeUnderCursor = null;
 
-    public GraphPanel(){
+    private int mousePreviousCordX = 0;
+    private int mousePreviousCordY = 0;
+
+    public GraphPanel() {
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addKeyListener(this);
         setFocusable(true);
         requestFocus();
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                System.out.println(e);
+                if (e.getButton() == 3) {
+                    showPopUpMenuNode(e);
+                } else if (e.getButton() == 1) {
+                    showPopUpMenuEdge(e);
+                    if (mousePreviousCordX != 0 && mousePreviousCordY != 0) {
+                        Edge edge = new Edge(mousePreviousCordX, mousePreviousCordY, e.getX(), e.getY());
+                        mousePreviousCordX = 0;
+                        mousePreviousCordY = 0;
+                        graph.addEdge(edge);
+                        showPopUpMenuEdge(e, edge);
+                        repaint();
+                    }
+                }
+            }
+        });
     }
 
     public Graph getGraph() {
@@ -51,32 +72,34 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
 
-    private Node isItNode (int x_cursor, int y_cursor){
-        for(Node node : graph.getNodesList()){
-            if(node.isCursorOverNode(x_cursor,y_cursor))
+    private Node isItNode(int x_cursor, int y_cursor) {
+        for (Node node : graph.getNodesList()) {
+            if (node.isCursorOverNode(x_cursor, y_cursor))
                 return node;
         }
         return null;
     }
-    private Node isItNodeEvent (java.awt.event.MouseEvent event){
+
+    private Node isItNodeEvent(java.awt.event.MouseEvent event) {
         return isItNode(event.getX(), event.getY());
     }
 
 
-    private Edge isItEdge (int x_cursor, int y_cursor){
-        if (edgeUnderCursor.isCursorOverEdge(x_cursor,y_cursor)==true){
+    private Edge isItEdge(int x_cursor, int y_cursor) {
+        if (edgeUnderCursor.isCursorOverEdge(x_cursor, y_cursor) == true) {
             return edgeUnderCursor;
         }
         return null;
     }
-    private Edge isItEdgeEvent (java.awt.event.MouseEvent event){
+
+    private Edge isItEdgeEvent(java.awt.event.MouseEvent event) {
         return isItEdge(event.getX(), event.getY());
     }
 
 
-    private void setCursorEvent(java.awt.event.MouseEvent event){
+    private void setCursorEvent(java.awt.event.MouseEvent event) {
 
-        if( isItNode(event.getX(), event.getY()) != null) {
+        if (isItNode(event.getX(), event.getY()) != null) {
             nodeUnderCursor = isItNodeEvent(event);
 
             if (nodeUnderCursor != null) {
@@ -105,8 +128,8 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         mouseY = event.getY();
     }
 
-    private void setCursorObject(){
-        if(isItNode(mouseX, mouseY) != null) {
+    private void setCursorObject() {
+        if (isItNode(mouseX, mouseY) != null) {
             nodeUnderCursor = isItNode(mouseX, mouseY);
 
             if (nodeUnderCursor != null) {
@@ -118,7 +141,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
             }
             setCursor(Cursor.getPredefinedCursor(mouseCursor));
 
-        } else if (isItEdge(mouseX, mouseY) != null){
+        } else if (isItEdge(mouseX, mouseY) != null) {
             edgeUnderCursor = isItEdge(mouseX, mouseY);
 
             if (nodeUnderCursor != null) {
@@ -134,7 +157,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (graph==null) return;
+        if (graph == null) return;
         graph.draw(g);
 
     }
@@ -142,55 +165,24 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void keyTyped(KeyEvent e) {
-        char znak = e.getKeyChar();
-        if(nodeUnderCursor != null){
-            switch (znak){
-                case 'Y':
-                    nodeUnderCursor.setColor(Color.yellow);
-                    break;
-                case 'G':
-                    nodeUnderCursor.setColor(Color.green);
-                    break;
-                case 'R':
-                    nodeUnderCursor.setColor(Color.red);
-                    break;
-                case 'W':
-                    nodeUnderCursor.setColor(Color.white);
-                    break;
-                case '+':
-                    int r = nodeUnderCursor.getR()+10;
-                    nodeUnderCursor.setR(r);
-                    break;
-                case '-':
-                    if (nodeUnderCursor.getR()>10){
-                        r = nodeUnderCursor.getR() - 10;
-                        nodeUnderCursor.setR(r);
-                    }else{
-                        r = 1;
-                        nodeUnderCursor.setR(r);
-                    }
-                    break;
-            }
-            repaint();
-            setCursorObject();
-        }
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int step = 1;
-        switch(e.getKeyCode()){
+        switch (e.getKeyCode()) {
 
             case KeyEvent.VK_LEFT:
-                graph.moveAllNodes(-step,0);
+                graph.moveAllNodes(-step, 0);
                 break;
 
             case KeyEvent.VK_RIGHT:
-                graph.moveAllNodes(step,0);
+                graph.moveAllNodes(step, 0);
                 break;
 
             case KeyEvent.VK_DOWN:
-                graph.moveAllNodes(0,-step);
+                graph.moveAllNodes(0, -step);
                 break;
 
             case KeyEvent.VK_UP:
@@ -198,11 +190,11 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
                 break;
 
             case KeyEvent.VK_DELETE:
-                if(nodeUnderCursor != null) {
+                if (nodeUnderCursor != null) {
                     graph.removeNode(nodeUnderCursor);
                     nodeUnderCursor = null;
-                }else{
-                    if(edgeUnderCursor != null){
+                } else {
+                    if (edgeUnderCursor != null) {
                         graph.removeEdge(edgeUnderCursor);
                         edgeUnderCursor = null;
                     }
@@ -220,8 +212,8 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        if (e.getButton()==1) leftMouseButton = true;
-        if (e.getButton()==2) rightMouseButton = true;
+        if (e.getButton() == 1) leftMouseButton = true;
+        if (e.getButton() == 3) rightMouseButton = true;
         setCursorEvent(e);
     }
 
@@ -265,14 +257,16 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
 
-    private void showPopUpMenuNode(java.awt.event.MouseEvent event){
+    public void showPopUpMenuNode(java.awt.event.MouseEvent event) {
         JMenuItem menuItem;
 
         JPopupMenu popup = new JPopupMenu();
         menuItem = new JMenuItem("New node");
 
         menuItem.addActionListener((action) -> {
-            graph.addNode(new Node(event.getX(), event.getY()));
+            Node node = new Node(event.getX(), event.getY());
+            graph.addNode(node);
+            this.showPopUpMenuNode(event, node);
             repaint();
         });
 
@@ -280,7 +274,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         popup.show(event.getComponent(), event.getX(), event.getY());
     }
 
-    private void showPopUpMenuNode(java.awt.event.MouseEvent event, Node node){
+    public void showPopUpMenuNode(java.awt.event.MouseEvent event, Node node) {
         JMenuItem menuItem;
 
         JPopupMenu popup = new JPopupMenu();
@@ -291,7 +285,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
                     this,
                     "Choose Background Color",
                     node.getColor());
-            if (newColor!=null){
+            if (newColor != null) {
                 node.setColor(newColor);
             }
             repaint();
@@ -310,18 +304,15 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         popup.show(event.getComponent(), event.getX(), event.getY());
     }
 
-
-    /*
-    TODO
-     */
-    private void showPopUpMenuEdge(java.awt.event.MouseEvent event){
+    public void showPopUpMenuEdge(java.awt.event.MouseEvent event) {
         JMenuItem menuItem;
 
         JPopupMenu popup = new JPopupMenu();
         menuItem = new JMenuItem("New edge");
 
         menuItem.addActionListener((action) -> {
-   //         graph.addEdge(new Edge(event.getX(), event.getY(),  )); ------??
+            mousePreviousCordX = event.getX();
+            mousePreviousCordY = event.getY();
             repaint();
         });
 
@@ -329,7 +320,7 @@ public class GraphPanel extends JPanel implements MouseListener, MouseMotionList
         popup.show(event.getComponent(), event.getX(), event.getY());
     }
 
-    private void showPopUpMenuEdge(java.awt.event.MouseEvent event, Edge edge){
+    public void showPopUpMenuEdge(java.awt.event.MouseEvent event, Edge edge) {
         JMenuItem menuItem = new JMenuItem("Remove this edge");
 
         JPopupMenu popup = new JPopupMenu();
